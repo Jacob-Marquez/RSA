@@ -94,6 +94,11 @@ def genKeys(p, q):
     with open('private_key.txt', 'w') as f:
         f.write(f"{n}\n{d}\n")
         
+    print(f"n :{n}")
+    print(f"phi: {phi}")
+    print(f"pub key: {e}")
+    print(f"priv: {d}")
+        
 def encrypt():
         # read public key
     with open('public_key.txt') as f:
@@ -110,6 +115,9 @@ def encrypt():
     # write ciphertext
     with open('ciphertext.txt', 'w') as f:
         f.write(str(c))
+        
+    print(f"orignal message: {m}")
+    print(f"ciphertext: {c}")
         
     return
         
@@ -130,6 +138,8 @@ def decrypt():
     # write decrypted message
     with open('decrypted_message.txt', 'w') as f:
         f.write(str(m))
+        
+    print(f"decrypted message: {m}")
         
     return
     
