@@ -1,21 +1,26 @@
 import random
 from math import gcd
 
-def is_prime(n, k=20):
-    """Miller–Rabin primality test."""
+# Miller-Rabin primality test
+def isPrime(n, k=20):
+    
     if n < 2: return False
-    # small primes check
+    
+    # small primes check to save time
     small_primes = [2,3,5,7,11,13,17,19,23,29]
     for p in small_primes:
         if n == p:
             return True
         if n % p == 0:
             return False
-    # write n-1 = d * 2^s
-    d, s = n-1, 0
+        
+    # n-1 = d * 2^s
+    d = n-1
+    s = 0
     while d % 2 == 0:
         d //= 2
         s += 1
+        
     for _ in range(k):
         a = random.randrange(2, n-1)
         x = pow(a, d, n)
@@ -30,7 +35,8 @@ def is_prime(n, k=20):
     return True
 
 # Generates a random prime of length "digits"
-def generate_prime(digits):
+def generatePrime(digits):
+    # set range of numbers
     low = 10**(digits-1)
     high = 10**digits - 1
     while True:
@@ -40,7 +46,8 @@ def generate_prime(digits):
             p += 1
         # test only odd numbers
         while p < high:
-            if is_prime(p):
+            # Miller-Rabin primality test
+            if isPrime(p):
                 return p
             p += 2
 
@@ -107,17 +114,11 @@ def encrypt():
     return
         
 def decrypt():
-        # read public key (to get n)
-    with open('public_key.txt') as f:
-        n = int(f.readline().strip())
-        _ = f.readline()  # discard e
 
     # read private key
     with open('private_key.txt') as f:
-        n2 = int(f.readline().strip())
+        n = int(f.readline().strip())
         d  = int(f.readline().strip())
-
-    assert n == n2, "Public and private moduli differ!"
 
     # read ciphertext
     with open('ciphertext.txt') as f:
@@ -129,14 +130,16 @@ def decrypt():
     # write decrypted message
     with open('decrypted_message.txt', 'w') as f:
         f.write(str(m))
+        
+    return
     
 def main():
     
     # generate p and q of length 100, with a difference ≥ 10^95
     
     while True:
-        p = generate_prime(100)
-        q = generate_prime(100)
+        p = generatePrime(100)
+        q = generatePrime(100)
         if p != q and abs(p-q) >= pow(10, 95):
             break
 
